@@ -1,0 +1,10 @@
+{
+  "/api/proxy/[...path]/route": "app/api/proxy/[...path]/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/income/page": "app/income/page.js",
+  "/assets/page": "app/assets/page.js",
+  "/liabilities/page": "app/liabilities/page.js",
+  "/credit-cards/page": "app/credit-cards/page.js",
+  "/page": "app/page.js",
+  "/recommendations/page": "app/recommendations/page.js"
+}

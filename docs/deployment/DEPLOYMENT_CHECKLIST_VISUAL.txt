@@ -1,0 +1,161 @@
+╔════════════════════════════════════════════════════════════════╗
+║                 VERCEL DEPLOYMENT CHECKLIST                    ║
+║                  Follow these steps exactly!                   ║
+╚════════════════════════════════════════════════════════════════╝
+
+┌────────────────────────────────────────────────────────────────┐
+│ STEP 1: Set Environment Variable in Vercel                    │
+└────────────────────────────────────────────────────────────────┘
+
+1. Go to: https://vercel.com/dashboard
+2. Click your WealthTrack project
+3. Click "Settings" tab
+4. Click "Environment Variables" in sidebar
+5. Add new variable:
+
+   ┌──────────────────────────────────────────────────────────┐
+   │ Variable Name:                                           │
+   │ NEXT_PUBLIC_API_URL                                      │
+   │                                                          │
+   │ Value:                                                   │
+   │ https://wealth-backend-env.eba-6sumcm74.us-east-1.elasti│
+   │ cbeanstalk.com/api                                       │
+   │                                                          │
+   │ ⚠️  MUST BE HTTPS (not http)                             │
+   └──────────────────────────────────────────────────────────┘
+
+6. Select ALL environments:
+   ☑️ Production
+   ☑️ Preview
+   ☑️ Development
+
+7. Click "Save"
+
+┌────────────────────────────────────────────────────────────────┐
+│ STEP 2: Deploy Your Code                                      │
+└────────────────────────────────────────────────────────────────┘
+
+Open PowerShell/Terminal and run:
+
+   cd "d:\AI Boot Camp"
+   git add .
+   git commit -m "Fix responsive layout and Vercel deployment"
+   git push
+
+Vercel will auto-deploy in ~2 minutes
+
+┌────────────────────────────────────────────────────────────────┐
+│ STEP 3: Redeploy Backend (if needed)                          │
+└────────────────────────────────────────────────────────────────┘
+
+OPTION A - Using EB CLI:
+   cd Backend
+   eb deploy
+
+OPTION B - Using AWS Console:
+   1. Zip Backend folder
+   2. Go to AWS Elastic Beanstalk Console
+   3. Upload and deploy
+
+┌────────────────────────────────────────────────────────────────┐
+│ STEP 4: TEST YOUR DEPLOYMENT                                  │
+└────────────────────────────────────────────────────────────────┘
+
+✅ Test Checklist:
+
+[ ] 1. Open Vercel URL on desktop browser
+[ ] 2. Open browser DevTools (F12) → Console tab
+[ ] 3. Click "Add Income"
+[ ] 4. Fill form and save
+[ ] 5. Check Console - should be NO red errors
+[ ] 6. Refresh page (F5)
+[ ] 7. Income should still be there ✅
+[ ] 8. Try on mobile phone
+[ ] 9. Hamburger menu (☰) should appear
+[ ] 10. All pages should look good
+
+┌────────────────────────────────────────────────────────────────┐
+│ COMMON ISSUES & FIXES                                         │
+└────────────────────────────────────────────────────────────────┘
+
+❌ PROBLEM: "Network Error" or "Failed to fetch"
+✅ FIX: 
+   - Check Vercel environment variable is HTTPS (not HTTP)
+   - Verify backend is running: 
+     https://wealth-backend-env.eba-6sumcm74.us-east-1.elasticbeanstalk.com/health
+
+❌ PROBLEM: CORS error in console
+✅ FIX: 
+   - Redeploy backend with updated CORS settings
+   - Backend MUST allow *.vercel.app domains
+
+❌ PROBLEM: Data disappears after refresh
+✅ FIX:
+   - Environment variable not set correctly
+   - Make sure it's set for "Production" environment
+   - Redeploy after setting variable
+
+❌ PROBLEM: Mobile menu not showing
+✅ FIX:
+   - Clear browser cache (Ctrl+Shift+R)
+   - Make screen smaller (< 1024px width)
+   - Try on actual mobile device
+
+┌────────────────────────────────────────────────────────────────┐
+│ SUCCESS INDICATORS                                             │
+└────────────────────────────────────────────────────────────────┘
+
+You'll know it's working when:
+
+✅ No errors in browser console
+✅ Income saves and persists after refresh
+✅ Mobile menu appears on small screens
+✅ Smooth scrolling works
+✅ All pages are responsive
+✅ Charts are visible on mobile
+
+┌────────────────────────────────────────────────────────────────┐
+│ VERIFICATION COMMANDS                                          │
+└────────────────────────────────────────────────────────────────┘
+
+Test backend health:
+curl https://wealth-backend-env.eba-6sumcm74.us-east-1.elasticbeanstalk.com/health
+
+Expected response:
+{"status":"OK","timestamp":"...","uptime":123}
+
+Test API endpoint:
+curl https://wealth-backend-env.eba-6sumcm74.us-east-1.elasticbeanstalk.com/api/income
+
+Expected response:
+[...] (array of income items)
+
+┌────────────────────────────────────────────────────────────────┐
+│ FINAL CHECKS                                                   │
+└────────────────────────────────────────────────────────────────┘
+
+Before you celebrate:
+
+✓ Tested on Chrome desktop
+✓ Tested on mobile phone (Safari/Chrome)
+✓ Added income and it saved
+✓ Added asset and it saved
+✓ Added liability and it saved
+✓ Refreshed page multiple times
+✓ No errors in console
+✓ Smooth scrolling works
+✓ Mobile menu works
+
+╔════════════════════════════════════════════════════════════════╗
+║              🎉 CONGRATULATIONS! 🎉                            ║
+║                                                                ║
+║   Your WealthTrack app is now production-ready!                ║
+║                                                                ║
+║   ✅ Responsive on all devices                                 ║
+║   ✅ Smooth scrolling                                          ║
+║   ✅ Data persistence working                                  ║
+║                                                                ║
+║   Enjoy your fully functional app! 🚀                          ║
+╚════════════════════════════════════════════════════════════════╝
+
+Need help? See: VERCEL_DEPLOYMENT_FIX.md

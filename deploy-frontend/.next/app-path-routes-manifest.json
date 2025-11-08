@@ -1,0 +1,10 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/api/proxy/[...path]/route": "/api/proxy/[...path]",
+  "/liabilities/page": "/liabilities",
+  "/income/page": "/income",
+  "/assets/page": "/assets",
+  "/credit-cards/page": "/credit-cards",
+  "/recommendations/page": "/recommendations",
+  "/page": "/"
+}

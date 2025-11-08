@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frontend Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #0070f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0051cc;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        pre {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Frontend-Backend Connection Test</h1>
+    
+    <div class="test-box">
+        <h2>Test 1: Backend Health Check</h2>
+        <button onclick="testHealth()">Test Health Endpoint</button>
+        <div id="health-result"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>Test 2: Get Income Data</h2>
+        <button onclick="testGetIncome()">Test GET /api/income</button>
+        <div id="get-result"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>Test 3: Create Income</h2>
+        <button onclick="testCreateIncome()">Test POST /api/income</button>
+        <div id="post-result"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>Configuration Info</h2>
+        <p><strong>Backend URL:</strong> <span id="backend-url"></span></p>
+        <p><strong>Current Page:</strong> <span id="current-url"></span></p>
+    </div>
+
+    <script>
+        const BACKEND_URL = 'http://localhost:5000';
+        const API_URL = 'http://localhost:5000/api';
+
+        document.getElementById('backend-url').textContent = API_URL;
+        document.getElementById('current-url').textContent = window.location.href;
+
+        async function testHealth() {
+            const resultDiv = document.getElementById('health-result');
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const response = await fetch(`${BACKEND_URL}/health`);
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✅ SUCCESS!</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ FAILED!</p>
+                    <p>Error: ${error.message}</p>
+                    <p><strong>This means the backend is not reachable from the browser!</strong></p>
+                `;
+            }
+        }
+
+        async function testGetIncome() {
+            const resultDiv = document.getElementById('get-result');
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/income`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✅ SUCCESS!</p>
+                    <p>Found ${Array.isArray(data) ? data.length : 0} income records</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ FAILED!</p>
+                    <p>Error: ${error.message}</p>
+                `;
+            }
+        }
+
+        async function testCreateIncome() {
+            const resultDiv = document.getElementById('post-result');
+            resultDiv.innerHTML = '<p>Testing...</p>';
+            
+            const testData = {
+                source: "Browser Test",
+                amount: 1234,
+                currency: "USD",
+                frequency: "monthly"
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/income`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(`HTTP ${response.status}: ${errorData.error || response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✅ SUCCESS!</p>
+                    <p><strong>Income created successfully!</strong></p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ FAILED!</p>
+                    <p>Error: ${error.message}</p>
+                    <p><strong>Possible causes:</strong></p>
+                    <ul>
+                        <li>Backend not running on port 5000</li>
+                        <li>CORS not configured properly</li>
+                        <li>Network/firewall blocking connection</li>
+                    </ul>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

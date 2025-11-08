@@ -1,0 +1,422 @@
+{
+	"info": {
+		"_postman_id": "982f3ebd-593c-454c-9ace-f253fba285f2",
+		"name": "Financial API - All Endpoints",
+		"description": "Complete Financial Planning API with all CRUD operations and AI recommendations",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "49016306",
+		"_collection_link": "https://kchamod1124-4168025.postman.co/workspace/Kavindu-Chamod's-Workspace~88a661da-fe69-42c7-8400-0fcb57cb39a6/collection/49016306-982f3ebd-593c-454c-9ace-f253fba285f2?action=share&source=collection_link&creator=49016306"
+	},
+	"item": [
+		{
+			"name": "System",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/health"
+					},
+					"response": []
+				},
+				{
+					"name": "API Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/"
+					},
+					"response": []
+				},
+				{
+					"name": "List Routes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/routes"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Income",
+			"item": [
+				{
+					"name": "Get All Income",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/api/income"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Income",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"source\": \"Salary\",\n  \"amount\": 5000,\n  \"currency\": \"USD\",\n  \"frequency\": \"monthly\"\n}"
+						},
+						"url": "{{base_url}}/api/income"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Income by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/api/income/{{income_id}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Income",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 6000\n}"
+						},
+						"url": "{{base_url}}/api/income/{{income_id}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Income",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/api/income/{{income_id}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Assets",
+			"item": [
+				{
+					"name": "Get All Assets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/api/assets"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Asset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Emergency Fund\",\n  \"type\": \"Savings Account\",\n  \"value\": 15000,\n  \"currency\": \"USD\"\n}"
+						},
+						"url": "{{base_url}}/api/assets"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Asset by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/api/assets/{{asset_id}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Asset",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"value\": 18000\n}"
+						},
+						"url": "{{base_url}}/api/assets/{{asset_id}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Asset",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/api/assets/{{asset_id}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Liabilities",
+			"item": [
+				{
+					"name": "Get All Liabilities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/api/liabilities"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Liability",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Car Loan\",\n  \"type\": \"Auto Loan\",\n  \"amount\": 25000,\n  \"currency\": \"USD\",\n  \"interestRate\": 3.5\n}"
+						},
+						"url": "{{base_url}}/api/liabilities"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Liability by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/api/liabilities/{{liability_id}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Liability",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 20000\n}"
+						},
+						"url": "{{base_url}}/api/liabilities/{{liability_id}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Liability",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/api/liabilities/{{liability_id}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Credit Cards",
+			"item": [
+				{
+					"name": "Get All Credit Cards",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/api/creditcards"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Credit Card",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"bank\": \"American Express\",\n  \"last4\": \"5678\",\n  \"creditLimit\": 8000,\n  \"outstandingBalance\": 2500,\n  \"currency\": \"USD\",\n  \"paymentDueDate\": \"2025-11-15T00:00:00.000Z\"\n}"
+						},
+						"url": "{{base_url}}/api/creditcards"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Credit Card by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/api/creditcards/{{card_id}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Credit Card",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"outstandingBalance\": 2000\n}"
+						},
+						"url": "{{base_url}}/api/creditcards/{{card_id}}"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Credit Card",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/api/creditcards/{{card_id}}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AI Recommendations",
+			"item": [
+				{
+					"name": "Get AI Recommendations (Auto)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/api/recommendations"
+					},
+					"response": []
+				},
+				{
+					"name": "Generate AI Recommendations (POST)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"income\": 5000,\n  \"expenses\": 3000,\n  \"goals\": \"Save for house down payment, build emergency fund, start retirement savings\",\n  \"max_tokens\": 512,\n  \"temperature\": 0.3\n}"
+						},
+						"url": "{{base_url}}/api/recommendations/generate"
+					},
+					"response": []
+				},
+				{
+					"name": "Generate AI Recommendations (GET)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/recommendations/generate?income=6000&expenses=3500&goals=Save%20for%20vacation&max_tokens=300&temperature=0.5",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"recommendations",
+								"generate"
+							],
+							"query": [
+								{
+									"key": "income",
+									"value": "6000"
+								},
+								{
+									"key": "expenses",
+									"value": "3500"
+								},
+								{
+									"key": "goals",
+									"value": "Save%20for%20vacation"
+								},
+								{
+									"key": "max_tokens",
+									"value": "300"
+								},
+								{
+									"key": "temperature",
+									"value": "0.5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Generate AI by Keywords",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"keywords\": [\"emergency fund\", \"debt payoff\", \"investment\", \"budgeting\"],\n  \"fast\": false,\n  \"maxTokens\": 600,\n  \"temperature\": 0.3,\n  \"save\": true\n}"
+						},
+						"url": "{{base_url}}/api/recommendations/generate-keywords"
+					},
+					"response": []
+				},
+				{
+					"name": "Get AI History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/api/recommendations/history"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000"
+		}
+	]
+}

@@ -1,0 +1,247 @@
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║         🚨 CANNOT ADD INCOME? READ THIS! 🚨                    ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+
+┌────────────────────────────────────────────────────────────────┐
+│                     THE PROBLEM                                │
+└────────────────────────────────────────────────────────────────┘
+
+❌ You cannot add income, assets, liabilities, or credit cards
+❌ Data doesn't save
+❌ Getting PowerShell errors
+
+┌────────────────────────────────────────────────────────────────┐
+│                     THE CAUSE                                  │
+└────────────────────────────────────────────────────────────────┘
+
+🔴 Your BACKEND SERVER is NOT running!
+🔴 Frontend needs backend to save data
+🔴 PowerShell profile has wrong content
+
+┌────────────────────────────────────────────────────────────────┐
+│                     THE SOLUTION                               │
+└────────────────────────────────────────────────────────────────┘
+
+   ╔══════════════════════════════════════════════════════════╗
+   ║  STEP 1: Fix PowerShell Profile                         ║
+   ╚══════════════════════════════════════════════════════════╝
+
+   1. Open Notepad as Administrator
+   
+   2. Open this file:
+      C:\Users\ASUS\OneDrive\Documents\WindowsPowerShell\
+      Microsoft.PowerShell_profile.ps1
+   
+   3. DELETE ALL CONTENT
+   
+   4. Type only this:
+      # PowerShell Profile
+   
+   5. Save and close
+   
+   6. Close ALL PowerShell windows
+
+   ╔══════════════════════════════════════════════════════════╗
+   ║  STEP 2: Start Both Servers                             ║
+   ╚══════════════════════════════════════════════════════════╝
+
+   1. Go to folder:
+      d:\AI Boot Camp
+   
+   2. Double-click:
+      START-EVERYTHING.bat
+   
+   3. Two new windows will open:
+      ┌─────────────────────────────────────┐
+      │  Window 1: Backend Server           │
+      │  Port: 5000                         │
+      │  Status: Server running...          │
+      └─────────────────────────────────────┘
+      
+      ┌─────────────────────────────────────┐
+      │  Window 2: Frontend Server          │
+      │  Port: 3000                         │
+      │  Status: Local: http://localhost... │
+      └─────────────────────────────────────┘
+   
+   4. KEEP BOTH WINDOWS OPEN!
+      Don't close them!
+
+   ╔══════════════════════════════════════════════════════════╗
+   ║  STEP 3: Test Your App                                  ║
+   ╚══════════════════════════════════════════════════════════╝
+
+   1. Wait 15 seconds for servers to fully start
+   
+   2. Open browser
+   
+   3. Go to: http://localhost:3000
+   
+   4. Click "Income" in navigation
+   
+   5. Click "Add Income" button
+   
+   6. Fill the form:
+      Source:    Salary
+      Amount:    100000
+      Currency:  LKR
+      Frequency: Monthly
+   
+   7. Click "Add Income"
+   
+   8. ✅ You should see: 
+      "Success: Income added successfully"
+   
+   9. Refresh page (F5)
+   
+   10. ✅ Income should still be there!
+
+┌────────────────────────────────────────────────────────────────┐
+│                  VERIFICATION TESTS                            │
+└────────────────────────────────────────────────────────────────┘
+
+Test 1 - Backend Running:
+   Open browser → http://localhost:5000/health
+   
+   ✅ Expected: {"status":"OK","timestamp":"...","uptime":123}
+   ❌ If not: Backend is not running
+
+Test 2 - Frontend Running:
+   Open browser → http://localhost:3000
+   
+   ✅ Expected: WealthTrack app loads
+   ❌ If not: Frontend is not running
+
+Test 3 - No Errors:
+   1. Press F12 in browser
+   2. Click Console tab
+   3. Try adding income
+   
+   ✅ Expected: No red errors
+   ❌ If errors: Backend not connected
+
+┌────────────────────────────────────────────────────────────────┐
+│                     TROUBLESHOOTING                            │
+└────────────────────────────────────────────────────────────────┘
+
+Problem: "Port 5000 already in use"
+   Solution:
+   1. Open Task Manager (Ctrl+Shift+Esc)
+   2. Find "Node.js" processes
+   3. Right-click → End task
+   4. Run START-EVERYTHING.bat again
+
+Problem: "Cannot find module"
+   Solution:
+   1. Close both server windows
+   2. Delete these folders:
+      d:\AI Boot Camp\Backend\node_modules
+      d:\AI Boot Camp\Frontend\node_modules
+   3. Run START-EVERYTHING.bat again
+
+Problem: Servers start but can't add income
+   Solution:
+   1. Check backend window for errors
+   2. Check MongoDB connection string
+   3. Open browser DevTools (F12)
+   4. Look for error messages
+
+Problem: PowerShell still shows errors
+   Solution:
+   1. Make sure you edited the CORRECT file
+   2. Make sure you SAVED the file
+   3. Make sure you CLOSED ALL PowerShell windows
+   4. Open a NEW PowerShell window
+
+┌────────────────────────────────────────────────────────────────┐
+│                 WHAT TO EXPECT (NORMAL)                        │
+└────────────────────────────────────────────────────────────────┘
+
+Backend Window Should Show:
+   MongoDB connection: Connected
+   🚀 Server running on port 5000
+   🔍 Health check: http://localhost:5000/health
+   🌍 Environment: development
+
+Frontend Window Should Show:
+   ▲ Next.js 15.5.4
+   - Local:        http://localhost:3000
+   ✓ Ready in 3.2s
+
+Browser Should Show:
+   WealthTrack Dashboard
+   Navigation: Dashboard, Income, Assets, etc.
+   No error messages
+   Can add income successfully
+
+┌────────────────────────────────────────────────────────────────┐
+│                    FOR VERCEL PRODUCTION                       │
+└────────────────────────────────────────────────────────────────┘
+
+Once local development works:
+
+1. Go to: https://vercel.com/dashboard
+2. Click your project
+3. Settings → Environment Variables
+4. Add:
+   Name:  NEXT_PUBLIC_API_URL
+   Value: https://wealth-backend-env.eba-6sumcm74.us-east-1.
+          elasticbeanstalk.com/api
+   
+   ⚠️  IMPORTANT: Must be HTTPS (not HTTP)
+
+5. Select: Production, Preview, Development
+6. Click Save
+7. Redeploy your app
+
+┌────────────────────────────────────────────────────────────────┐
+│                      QUICK REFERENCE                           │
+└────────────────────────────────────────────────────────────────┘
+
+Start Servers:
+   Double-click: d:\AI Boot Camp\START-EVERYTHING.bat
+
+Stop Servers:
+   Close both command windows
+
+Open App:
+   http://localhost:3000
+
+Check Backend:
+   http://localhost:5000/health
+
+Check Logs:
+   Look at the two command windows
+
+Restart Everything:
+   1. Close both windows
+   2. Run START-EVERYTHING.bat again
+
+┌────────────────────────────────────────────────────────────────┐
+│                     SUCCESS CHECKLIST                          │
+└────────────────────────────────────────────────────────────────┘
+
+✓ PowerShell profile fixed (no errors on startup)
+✓ Backend window open and running
+✓ Frontend window open and running
+✓ http://localhost:3000 loads in browser
+✓ Can click "Add Income"
+✓ Form submission works
+✓ See "Success" message
+✓ Income appears in list
+✓ Refresh page - income still there
+✓ No errors in console (F12)
+
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║                 🎉 THAT'S IT! 🎉                               ║
+║                                                                ║
+║   Just run START-EVERYTHING.bat and you're ready!              ║
+║                                                                ║
+║   Keep the two windows open while using the app!               ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+
+Need more help? Read: README_START_HERE.md

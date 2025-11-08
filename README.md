@@ -141,7 +141,28 @@ AI Boot Camp/
     └── testing/            # Testing documentation
 ```
 
-## 🔌 API Endpoints
+## � Repository contents (what was pushed)
+
+The repository pushed to GitHub (branch `main`) contains the following top-level items:
+
+- `Backend/` — Node.js Express API server and all backend code and scripts
+- `Frontend/` — Next.js 15 frontend application (App Router)
+- `deploy-frontend/` — helper/deployment files for frontend
+- `docs/` — full project documentation and deployment guides
+- `comprehensive-test.js` — project-wide test script
+- `test-frontend-backend-connectivity.js` — quick connectivity test (local)
+- `.gitignore` — repository ignores (node_modules, build artifacts, .env, *.zip)
+
+If you need a different subset pushed (for example excluding large deployment artifacts), tell me which folders to keep or remove and I'll update the repo accordingly.
+
+## ✅ How I verified the project locally
+
+- Started the backend (default PORT 5000) and confirmed the `/health` endpoint returns 200.
+- Started the Next.js frontend (localhost:3000) and confirmed it serves pages.
+- Ran `test-frontend-backend-connectivity.js` which confirmed the backend health and `GET /api/income` endpoint.
+
+
+## �🔌 API Endpoints
 
 ### Income Management
 - `GET /api/income` - Get all income records

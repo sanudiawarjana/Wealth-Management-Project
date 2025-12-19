@@ -1,73 +1,64 @@
 // Test script to verify Frontend to Backend connectivity
-const http = require('http');
+const axios = require('axios');
+
+// Create axios instance with custom configuration
+const api = axios.create({
+  baseURL: 'http://127.0.0.1:5000',
+  timeout: 5000,
+  headers: {
+    'Accept': 'application/json'
+  }
+});
 
 // Test the Backend health endpoint
-function testBackendHealth() {
+async function testBackendHealth() {
   console.log('Testing Backend health endpoint...');
   
-  const options = {
-    hostname: 'localhost',
-    port: 5000,
-    path: '/health',
-    method: 'GET'
-  };
-
-  const req = http.request(options, (res) => {
-    console.log(`Backend Health Status Code: ${res.statusCode}`);
-    
-    res.on('data', (d) => {
-      process.stdout.write(d);
-    });
-    
-    res.on('end', () => {
-      console.log('\n✅ Backend health test completed\n');
-    });
-  });
-
-  req.on('error', (error) => {
+  try {
+    const response = await api.get('/health');
+    console.log(`Backend Health Status Code: ${response.status}`);
+    console.log('Response:', response.data);
+    console.log('✅ Backend health check successful:', response.data.status);
+    console.log('✅ Backend health test completed\n');
+  } catch (error) {
     console.error('❌ Backend health test failed:', error.message);
-  });
-
-  req.end();
+    if (error.response) {
+      console.error('Response status:', error.response.status);
+      console.error('Response data:', error.response.data);
+    } else if (error.request) {
+      console.error('Request failed to get a response');
+    }
+  }
 }
 
 // Test the Backend income endpoint
-function testBackendIncome() {
+async function testBackendIncome() {
   console.log('Testing Backend income endpoint...');
   
-  const options = {
-    hostname: 'localhost',
-    port: 5000,
-    path: '/api/income',
-    method: 'GET'
-  };
-
-  const req = http.request(options, (res) => {
-    console.log(`Backend Income Status Code: ${res.statusCode}`);
-    
-    let data = '';
-    res.on('data', (chunk) => {
-      data += chunk;
-    });
-    
-    res.on('end', () => {
-      try {
-        const jsonData = JSON.parse(data);
-        console.log(`✅ Found ${Array.isArray(jsonData) ? jsonData.length : 'unknown'} income records`);
-        console.log('✅ Backend income test completed\n');
-      } catch (error) {
-        console.log('✅ Backend income test completed (data received)');
-      }
-    });
-  });
-
-  req.on('error', (error) => {
+  try {
+    const response = await api.get('/api/income');
+    console.log(`Backend Income Status Code: ${response.status}`);
+    const jsonData = response.data;
+    console.log(`✅ Found ${Array.isArray(jsonData) ? jsonData.length : 'unknown'} income records`);
+    console.log('✅ Backend income test completed\n');
+  } catch (error) {
     console.error('❌ Backend income test failed:', error.message);
-  });
-
-  req.end();
+    if (error.response) {
+      console.error('Response status:', error.response.status);
+      console.error('Response data:', error.response.data);
+    } else if (error.request) {
+      console.error('Request failed to get a response');
+    }
+  }
 }
 
-// Run tests
-testBackendHealth();
-setTimeout(testBackendIncome, 1000);
+// Run tests sequentially and exit after completion
+async function runTests() {
+  testBackendHealth();
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  testBackendIncome();
+  // Exit after allowing time for responses
+  setTimeout(() => process.exit(0), 2000);
+}
+
+runTests();

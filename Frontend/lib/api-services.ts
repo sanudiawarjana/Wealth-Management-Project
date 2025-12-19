@@ -87,7 +87,7 @@ const mapBackendToFrontendCreditCard = (item: BackendCreditCard): CreditCard => 
 // Income API Services
 export const incomeService = {
   getAll: async () => {
-    const response = await apiClient.get<BackendIncome[]>('/income');
+    const response = await apiClient.get<BackendIncome[]>('/api/income');
     if (response.success && response.data) {
       return response.data.map(mapBackendToFrontendIncome);
     }
@@ -95,7 +95,7 @@ export const incomeService = {
   },
 
   getById: async (id: string) => {
-    const response = await apiClient.get<BackendIncome>(`/income/${id}`);
+    const response = await apiClient.get<BackendIncome>(`/api/income/${id}`);
     if (response.success && response.data) {
       return mapBackendToFrontendIncome(response.data);
     }
@@ -103,7 +103,7 @@ export const incomeService = {
   },
 
   create: async (income: Omit<Income, 'id'>) => {
-    const response = await apiClient.post<BackendIncome>('/income', {
+    const response = await apiClient.post<BackendIncome>('/api/income', {
       source: income.source,
       amount: income.amount,
       currency: income.currency,
@@ -116,7 +116,7 @@ export const incomeService = {
   },
 
   update: async (id: string, income: Omit<Income, 'id'>) => {
-    const response = await apiClient.put<BackendIncome>(`/income/${id}`, {
+    const response = await apiClient.put<BackendIncome>(`/api/income/${id}`, {
       source: income.source,
       amount: income.amount,
       currency: income.currency,
@@ -129,7 +129,7 @@ export const incomeService = {
   },
 
   delete: async (id: string) => {
-    const response = await apiClient.delete(`/income/${id}`);
+    const response = await apiClient.delete(`/api/income/${id}`);
     if (!response.success) {
       throw new Error(response.error || 'Failed to delete income');
     }
@@ -139,7 +139,7 @@ export const incomeService = {
 // Asset API Services
 export const assetService = {
   getAll: async () => {
-    const response = await apiClient.get<BackendAsset[]>('/assets');
+    const response = await apiClient.get<BackendAsset[]>('/api/assets');
     if (response.success && response.data) {
       return response.data.map(mapBackendToFrontendAsset);
     }
@@ -147,7 +147,7 @@ export const assetService = {
   },
 
   getById: async (id: string) => {
-    const response = await apiClient.get<BackendAsset>(`/assets/${id}`);
+    const response = await apiClient.get<BackendAsset>(`/api/assets/${id}`);
     if (response.success && response.data) {
       return mapBackendToFrontendAsset(response.data);
     }
@@ -155,7 +155,7 @@ export const assetService = {
   },
 
   create: async (asset: Omit<Asset, 'id'>) => {
-    const response = await apiClient.post<BackendAsset>('/assets', {
+    const response = await apiClient.post<BackendAsset>('/api/assets', {
       name: asset.name,
       type: asset.type,
       value: asset.value,
@@ -168,7 +168,7 @@ export const assetService = {
   },
 
   update: async (id: string, asset: Omit<Asset, 'id'>) => {
-    const response = await apiClient.put<BackendAsset>(`/assets/${id}`, {
+    const response = await apiClient.put<BackendAsset>(`/api/assets/${id}`, {
       name: asset.name,
       type: asset.type,
       value: asset.value,
@@ -181,7 +181,7 @@ export const assetService = {
   },
 
   delete: async (id: string) => {
-    const response = await apiClient.delete(`/assets/${id}`);
+    const response = await apiClient.delete(`/api/assets/${id}`);
     if (!response.success) {
       throw new Error(response.error || 'Failed to delete asset');
     }
@@ -191,7 +191,7 @@ export const assetService = {
 // Liability API Services
 export const liabilityService = {
   getAll: async () => {
-    const response = await apiClient.get<BackendLiability[]>('/liabilities');
+    const response = await apiClient.get<BackendLiability[]>('/api/liabilities');
     if (response.success && response.data) {
       return response.data.map(mapBackendToFrontendLiability);
     }
@@ -199,7 +199,7 @@ export const liabilityService = {
   },
 
   getById: async (id: string) => {
-    const response = await apiClient.get<BackendLiability>(`/liabilities/${id}`);
+    const response = await apiClient.get<BackendLiability>(`/api/liabilities/${id}`);
     if (response.success && response.data) {
       return mapBackendToFrontendLiability(response.data);
     }
@@ -207,7 +207,7 @@ export const liabilityService = {
   },
 
   create: async (liability: Omit<Liability, 'id'>) => {
-    const response = await apiClient.post<BackendLiability>('/liabilities', {
+    const response = await apiClient.post<BackendLiability>('/api/liabilities', {
       name: liability.name,
       type: liability.type,
       amount: liability.amount,
@@ -221,7 +221,7 @@ export const liabilityService = {
   },
 
   update: async (id: string, liability: Omit<Liability, 'id'>) => {
-    const response = await apiClient.put<BackendLiability>(`/liabilities/${id}`, {
+    const response = await apiClient.put<BackendLiability>(`/api/liabilities/${id}`, {
       name: liability.name,
       type: liability.type,
       amount: liability.amount,
@@ -235,7 +235,7 @@ export const liabilityService = {
   },
 
   delete: async (id: string) => {
-    const response = await apiClient.delete(`/liabilities/${id}`);
+    const response = await apiClient.delete(`/api/liabilities/${id}`);
     if (!response.success) {
       throw new Error(response.error || 'Failed to delete liability');
     }
@@ -245,7 +245,7 @@ export const liabilityService = {
 // Credit Card API Services
 export const creditCardService = {
   getAll: async () => {
-    const response = await apiClient.get<BackendCreditCard[]>('/creditcards');
+    const response = await apiClient.get<BackendCreditCard[]>('/api/creditcards');
     if (response.success && response.data) {
       return response.data.map(mapBackendToFrontendCreditCard);
     }
@@ -253,7 +253,7 @@ export const creditCardService = {
   },
 
   getById: async (id: string) => {
-    const response = await apiClient.get<BackendCreditCard>(`/creditcards/${id}`);
+    const response = await apiClient.get<BackendCreditCard>(`/api/creditcards/${id}`);
     if (response.success && response.data) {
       return mapBackendToFrontendCreditCard(response.data);
     }
@@ -261,7 +261,7 @@ export const creditCardService = {
   },
 
   create: async (card: Omit<CreditCard, 'id'>) => {
-    const response = await apiClient.post<BackendCreditCard>('/creditcards', {
+    const response = await apiClient.post<BackendCreditCard>('/api/creditcards', {
       bank: card.bank,
       last4: card.lastFourDigits,
       creditLimit: card.limit,
@@ -276,7 +276,7 @@ export const creditCardService = {
   },
 
   update: async (id: string, card: Omit<CreditCard, 'id'>) => {
-    const response = await apiClient.put<BackendCreditCard>(`/creditcards/${id}`, {
+    const response = await apiClient.put<BackendCreditCard>(`/api/creditcards/${id}`, {
       bank: card.bank,
       last4: card.lastFourDigits,
       creditLimit: card.limit,
@@ -291,7 +291,7 @@ export const creditCardService = {
   },
 
   delete: async (id: string) => {
-    const response = await apiClient.delete(`/creditcards/${id}`);
+    const response = await apiClient.delete(`/api/creditcards/${id}`);
     if (!response.success) {
       throw new Error(response.error || 'Failed to delete credit card');
     }
@@ -301,7 +301,7 @@ export const creditCardService = {
 // Recommendation API Service
 export const recommendationService = {
   generate: async () => {
-    const response = await apiClient.post<{ recommendations: any; textSummary: string }>('/recommendations', {});
+    const response = await apiClient.post<{ recommendations: any; textSummary: string }>('/api/recommendations', {});
     if (response.success && response.data) {
       return response.data;
     }

@@ -31,50 +31,22 @@ app.use(helmet({
   },
 }));
 
-// CORS configuration - Allow localhost and Vercel domains
+// CORS configuration
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'http://localhost:3000',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+];
 const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, Postman, curl)
-    if (!origin) return callback(null, true);
-    
-    // Allow all localhost ports in development
-    const allowedOrigins = [
-      'http://localhost:3000',
-      'http://localhost:3001', 
-      'http://localhost:3002',
-      'http://localhost:3003',
-      process.env.FRONTEND_URL,
-      // Allow Vercel preview and production domains
-      /\.vercel\.app$/,
-      /^https:\/\/.*\.vercel\.app$/,
-      // Allow mobile devices on local network
-      /^http:\/\/192\.168\.\d+\.\d+(:\d+)?$/,
-      /^http:\/\/10\.\d+\.\d+\.\d+(:\d+)?$/
-    ].filter(Boolean);
-    
-    // Check if origin matches any allowed pattern
-    const isAllowed = allowedOrigins.some(allowed => {
-      if (typeof allowed === 'string') {
-        return origin.startsWith(allowed);
-      } else if (allowed instanceof RegExp) {
-        return allowed.test(origin);
-      }
-      return false;
-    });
-    
-    if (isAllowed) {
-      callback(null, true);
-    } else {
-      logger.warn(`CORS blocked origin: ${origin}`);
-      callback(new Error('Not allowed by CORS'));
-    }
+  origin: (origin, cb) => {
+    // Allow non-browser tools (no origin) and whitelisted origins
+    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+    return cb(new Error('CORS policy: Origin not allowed'), false);
   },
-  credentials: true,
-  optionsSuccessStatus: 200,
+  credentials: false,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  exposedHeaders: ['Content-Range', 'X-Content-Range'],
-  maxAge: 600, // Cache preflight for 10 minutes
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
 
@@ -166,11 +138,14 @@ app.get('/', (req, res) => {
 
 // ----------------- Health Check -----------------
 app.get('/health', (req, res) => {
+  logger.info('Health check request received');
+  logger.info('Request headers:', req.headers);
   res.status(200).json({
     status: 'OK',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
   });
+  logger.info('Health check response sent');
 });
 
 // ----------------- Routes Inspection -----------------
@@ -193,12 +168,22 @@ const startServer = async () => {
   try {
     await connectDB();
     logger.success('Database connected successfully');
+    logger.info('Setting up server...');
     
-    app.listen(PORT, '0.0.0.0', () => {
-      logger.success(`🚀 Server running on port ${PORT}`);
+    // Create server without binding immediately
+    const server = app.listen(PORT, '127.0.0.1', () => {
+      logger.success(`🚀 Server running at http://localhost:${PORT}`);
       logger.info(`🔍 Health check: http://localhost:${PORT}/health`);
       logger.info(`📋 Route list: http://localhost:${PORT}/routes`);
       logger.info(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+
+    server.on('error', (error) => {
+      if (error.code === 'EADDRINUSE') {
+        logger.error(`Port ${PORT} is already in use`);
+      } else {
+        logger.error('Server error:', error);
+      }
     });
   } catch (err) {
     logger.error('❌ Failed to start server:');

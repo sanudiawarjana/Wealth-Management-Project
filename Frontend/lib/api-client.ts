@@ -1,5 +1,10 @@
 // API Configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
+// Ensure consistent URL formatting
+const getApiUrl = () => {
+  return API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
+};
 
 // API Response Types
 export interface ApiResponse<T> {
@@ -30,12 +35,26 @@ class ApiClient {
     attempt = 1
   ): Promise<Response> {
     try {
-      const response = await fetch(url, {
+      const apiUrl = getApiUrl();
+      // Don't add /api prefix if it's already in the URL
+      const cleanUrl = url.startsWith('/api/') ? url : url.startsWith('/') ? `/api${url}` : `/api/${url}`;
+      const fullUrl = url.startsWith('http') ? url : `${apiUrl}${cleanUrl}`;
+      
+      console.log('Making request:', {
+        url: fullUrl,
+        method: options.method,
+        headers: options.headers
+      });
+
+      const response = await fetch(fullUrl, {
         ...options,
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
           ...options.headers,
         },
+        mode: 'cors',
+        credentials: 'omit',
       });
 
       // If response is OK or client error (4xx), return immediately
@@ -52,23 +71,29 @@ class ApiClient {
 
       return response;
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error(`Network error fetching ${fullUrl}:`, message);
       if (attempt < this.retryAttempts) {
         console.warn(`Network error, retrying... (${attempt}/${this.retryAttempts})`);
         await this.delay(this.retryDelay * attempt);
         return this.fetchWithRetry(url, options, attempt + 1);
       }
-      throw error;
+      throw new Error(`Network error fetching ${fullUrl}: ${message}`);
     }
   }
 
   async get<T>(endpoint: string): Promise<ApiResponse<T>> {
     try {
-      const response = await this.fetchWithRetry(`${this.baseUrl}${endpoint}`, {
+      const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+      console.log('Making GET request to:', cleanEndpoint); // Debug log
+      
+      const response = await this.fetchWithRetry(cleanEndpoint, {
         method: 'GET',
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        console.error('API Error:', response.status, response.statusText); // Debug log
+        const errorData = await response.json().catch(() => ({ error: `HTTP ${response.status}: ${response.statusText}` }));
         return {
           success: false,
           error: errorData.error || `Request failed with status ${response.status}`,
@@ -76,6 +101,7 @@ class ApiClient {
       }
 
       const data = await response.json();
+      console.log('API Response:', data); // Debug log
       return { success: true, data };
     } catch (error) {
       console.error('API GET Error:', error);
@@ -88,7 +114,8 @@ class ApiClient {
 
   async post<T>(endpoint: string, body: unknown): Promise<ApiResponse<T>> {
     try {
-      const response = await this.fetchWithRetry(`${this.baseUrl}${endpoint}`, {
+      const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+      const response = await this.fetchWithRetry(cleanEndpoint, {
         method: 'POST',
         body: JSON.stringify(body),
       });
@@ -114,7 +141,8 @@ class ApiClient {
 
   async put<T>(endpoint: string, body: unknown): Promise<ApiResponse<T>> {
     try {
-      const response = await this.fetchWithRetry(`${this.baseUrl}${endpoint}`, {
+      const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+      const response = await this.fetchWithRetry(cleanEndpoint, {
         method: 'PUT',
         body: JSON.stringify(body),
       });
@@ -140,7 +168,8 @@ class ApiClient {
 
   async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
     try {
-      const response = await this.fetchWithRetry(`${this.baseUrl}${endpoint}`, {
+      const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+      const response = await this.fetchWithRetry(cleanEndpoint, {
         method: 'DELETE',
       });
 
